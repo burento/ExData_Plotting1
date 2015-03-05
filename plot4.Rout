@@ -1,0 +1,56 @@
+
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin14.1.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> library(data.table)
+> DF <- fread("household_power_consumption.txt",sep=";",na.strings=c("NA","","?"))
+Warning messages:
+1: In fread("household_power_consumption.txt", sep = ";", na.strings = c("NA",  :
+  Bumped column 3 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+2: In fread("household_power_consumption.txt", sep = ";", na.strings = c("NA",  :
+  Bumped column 4 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+3: In fread("household_power_consumption.txt", sep = ";", na.strings = c("NA",  :
+  Bumped column 5 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+4: In fread("household_power_consumption.txt", sep = ";", na.strings = c("NA",  :
+  Bumped column 6 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+5: In fread("household_power_consumption.txt", sep = ";", na.strings = c("NA",  :
+  Bumped column 7 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+6: In fread("household_power_consumption.txt", sep = ";", na.strings = c("NA",  :
+  Bumped column 8 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+> data <- subset(DF,as.Date(Date,format="%d/%m/%Y") == as.Date("2007-02-01") | as.Date(Date,format="%d/%m/%Y") == as.Date("2007-02-02") )
+> library(datasets)
+> png("plot4.png",width=480,height=480)
+> par(mfrow=c(2,2))
+> plot(data$Global_active_power ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),type="l",xlab="",ylab="Global Active Power",main="")
+> plot(data$Voltage ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),type="l",xlab="datetime",ylab="Voltage",main="")
+> plot(data$Sub_metering_1 ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),type="l",xlab="",ylab="Energy sub metering",main="",col="black")
+> lines(data$Sub_metering_2 ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),col="red",type="l")
+> lines(data$Sub_metering_3 ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),col="blue",type="l")
+> legend("topright",c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),lty=1,lwd=2,box.lwd=0)
+> plot(data$Global_reactive_power ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),type="l",xlab="datetime",ylab="Global_reactive_power",main="")
+> dev.off()
+null device 
+          1 
+> rm(data)
+> rm(DF)
+> 
+> proc.time()
+   user  system elapsed 
+  5.073   0.228   5.302 

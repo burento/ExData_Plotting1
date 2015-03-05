@@ -1,0 +1,44 @@
+
+R version 3.1.2 (2014-10-31) -- "Pumpkin Helmet"
+Copyright (C) 2014 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin14.1.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> library(data.table)
+> DF <- fread("household_power_consumption.txt",sep=";",select=c("Date","Time","Sub_metering_1","Sub_metering_2","Sub_metering_3"),na.strings=c("NA","","?"))
+Warning messages:
+1: In fread("household_power_consumption.txt", sep = ";", select = c("Date",  :
+  Bumped column 7 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+2: In fread("household_power_consumption.txt", sep = ";", select = c("Date",  :
+  Bumped column 8 to type character on data row 6840, field contains '?'. Coercing previously read values in this column from logical, integer or numeric back to character which may not be lossless; e.g., if '00' and '000' occurred before they will now be just '0', and there may be inconsistencies with treatment of ',,' and ',NA,' too (if they occurred in this column before the bump). If this matters please rerun and set 'colClasses' to 'character' for this column. Please note that column type detection uses the first 5 rows, the middle 5 rows and the last 5 rows, so hopefully this message should be very rare. If reporting to datatable-help, please rerun and include the output from verbose=TRUE.
+> data <- subset(DF,as.Date(Date,format="%d/%m/%Y") == as.Date("2007-02-01") | as.Date(Date,format="%d/%m/%Y") == as.Date("2007-02-02") )
+> library(datasets)
+> png("plot3.png",width=480,height=480)
+> plot(data$Sub_metering_1 ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),type="l",xlab="",ylab="Energy sub metering",main="",col="black")
+> lines(data$Sub_metering_2 ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),col="red",type="l")
+> lines(data$Sub_metering_3 ~ as.POSIXct(paste(data$Date,data$Time),format="%d/%m/%Y %H:%M:%S"),col="blue",type="l")
+> legend("topright",c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),lty=1,lwd=2)
+> dev.off()
+null device 
+          1 
+> rm(data)
+> rm(DF)
+> 
+> proc.time()
+   user  system elapsed 
+  4.267   0.204   4.467 
